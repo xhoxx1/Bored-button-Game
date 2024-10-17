@@ -205,3 +205,242 @@ button {
 #login, #signup, #logout {
     margin: 10px;
 }
+
+/* Hangman styles */
+#hangman-game {
+    text-align: center;
+}
+
+#word-display {
+    font-size: 24px;
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+}
+
+#guess-input {
+    width: 30px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+/* Rock Paper Scissors styles */
+#rps-game {
+    text-align: center;
+}
+
+.rps-choice {
+    font-size: 18px;
+    margin: 0 10px;
+}
+
+/* Whack-a-Mole styles */
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.mole-hole {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+.mole-hole.up::after {
+    content: '';
+    display: block;
+    width: 70%;
+    height: 70%;
+    background-color: #8B4513;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    transition: bottom 0.1s;
+}
+
+.mole-hole.up::after {
+    bottom: 50%;
+}
+
+/* Puzzle Slider styles */
+#puzzle-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+/* Simon Says styles */
+#simon-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 320px;
+    height: 320px;
+    margin: 0 auto;
+}
+
+.simon-button {
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#green { background-color: #00a86b; }
+#red { background-color: #ff0000; }
+#yellow { background-color: #ffd700; }
+#blue { background-color: #0000ff; }
+
+/* Minesweeper styles */
+#minesweeper-board {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    gap: 1px;
+    margin: 0 auto;
+}
+
+/* 2048 styles */
+#game-2048 {
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#game-header-2048 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#score-container-2048 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #776e65;
+}
+
+#score-2048 {
+    display: block;
+    font-size: 24px;
+}
+
+#board-2048 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+    background-color: #bbada0;
+    border-radius: 5px;
+    padding: 15px;
+    position: relative;
+}
+
+.tile {
+    width: 80px;
+    height: 80px;
+    border-radius: 3px;
+    background-color: #cdc1b4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #776e65;
+    position: absolute;
+    transition: transform 0.2s ease-in-out;
+}
+
+.tile[data-row="0"] { top: 15px; }
+.tile[data-row="1"] { top: 110px; }
+.tile[data-row="2"] { top: 205px; }
+.tile[data-row="3"] { top: 300px; }
+
+.tile[data-col="0"] { left: 15px; }
+.tile[data-col="1"] { left: 110px; }
+.tile[data-col="2"] { left: 205px; }
+.tile[data-col="3"] { left: 300px; }
+
+.tile-2 { background-color: #eee4da; }
+.tile-4 { background-color: #ede0c8; }
+.tile-8 { background-color: #f2b179; color: #f9f6f2; }
+.tile-16 { background-color: #f59563; color: #f9f6f2; }
+.tile-32 { background-color: #f67c5f; color: #f9f6f2; }
+.tile-64 { background-color: #f65e3b; color: #f9f6f2; }
+.tile-128 { background-color: #edcf72; color: #f9f6f2; font-size: 28px; }
+.tile-256 { background-color: #edcc61; color: #f9f6f2; font-size: 28px; }
+.tile-512 { background-color: #edc850; color: #f9f6f2; font-size: 28px; }
+.tile-1024 { background-color: #edc53f; color: #f9f6f2; font-size: 24px; }
+.tile-2048 { background-color: #edc22e; color: #f9f6f2; font-size: 24px; }
+
+#new-game-2048 {
+    background-color: #8f7a66;
+    color: #f9f6f2;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#new-game-2048:hover {
+    background-color: #9f8b77;
+}
+
+/* Tetris styles */
+#tetris-canvas {
+    border: 1px solid #ffffff;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Flappy Bird styles */
+#flappy-canvas {
+    border: 1px solid #ffffff;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Sudoku styles */
+#sudoku-board {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 1px;
+    width: 450px;
+    height: 450px;
+    margin: 0 auto;
+    background-color: #333;
+}
+
+.sudoku-cell {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #000;
+}
+
+.sudoku-cell:nth-child(3n) {
+    border-right: 2px solid #000;
+}
+
+.sudoku-cell:nth-child(9n) {
+    border-right: none;
+}
+
+.sudoku-cell:nth-child(n+19):nth-child(-n+27),
+.sudoku-cell:nth-child(n+46):nth-child(-n+54) {
+    border-bottom: 2px solid #000;
+}
+
+#start-simon, #restart-simon {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}

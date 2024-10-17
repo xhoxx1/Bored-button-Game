@@ -292,6 +292,616 @@ const games = [
             resetButton.addEventListener('click', resetGame);
             createBoard();
         }
+    },
+    {
+        name: "Hangman",
+        render: function() {
+            return `
+                <h2>Hangman</h2>
+                <div id="hangman-game">
+                    <p id="word-display"></p>
+                    <p id="guesses-left"></p>
+                    <input type="text" id="guess-input" maxlength="1">
+                    <button id="guess-button">Guess</button>
+                    <p id="hangman-message"></p>
+                </div>
+            `;
+        },
+        init: function() {
+            const words = ['javascript', 'python', 'html', 'css', 'react'];
+            let word = words[Math.floor(Math.random() * words.length)];
+            let guessedLetters = [];
+            let remainingGuesses = 6;
+
+            const wordDisplay = document.getElementById('word-display');
+            const guessesLeft = document.getElementById('guesses-left');
+            const guessInput = document.getElementById('guess-input');
+            const guessButton = document.getElementById('guess-button');
+            const message = document.getElementById('hangman-message');
+
+            function updateDisplay() {
+                wordDisplay.textContent = word.split('').map(letter => 
+                    guessedLetters.includes(letter) ? letter : '_'
+                ).join(' ');
+                guessesLeft.textContent = `Guesses left: ${remainingGuesses}`;
+            }
+
+            function makeGuess() {
+                const guess = guessInput.value.toLowerCase();
+                if (guess.length !== 1 || !/[a-z]/.test(guess)) {
+                    message.textContent = "Please enter a single letter.";
+                    return;
+                }
+                if (guessedLetters.includes(guess)) {
+                    message.textContent = "You already guessed that letter.";
+                    return;
+                }
+                guessedLetters.push(guess);
+                if (!word.includes(guess)) {
+                    remainingGuesses--;
+                }
+                updateDisplay();
+                checkGameStatus();
+                guessInput.value = '';
+            }
+
+            function checkGameStatus() {
+                if (wordDisplay.textContent.replace(/ /g, '') === word) {
+                    message.textContent = "Congratulations! You won!";
+                    guessButton.disabled = true;
+                } else if (remainingGuesses === 0) {
+                    message.textContent = `Game over. The word was "${word}".`;
+                    guessButton.disabled = true;
+                }
+            }
+
+            guessButton.addEventListener('click', makeGuess);
+            updateDisplay();
+        }
+    },
+    {
+        name: "Rock Paper Scissors",
+        render: function() {
+            return `
+                <h2>Rock Paper Scissors</h2>
+                <div id="rps-game">
+                    <button class="rps-choice" data-choice="rock">Rock</button>
+                    <button class="rps-choice" data-choice="paper">Paper</button>
+                    <button class="rps-choice" data-choice="scissors">Scissors</button>
+                    <p id="rps-result"></p>
+                    <p>Score: <span id="player-score">0</span> - <span id="computer-score">0</span></p>
+                </div>
+            `;
+        },
+        init: function() {
+            const choices = ['rock', 'paper', 'scissors'];
+            let playerScore = 0;
+            let computerScore = 0;
+
+            const resultDisplay = document.getElementById('rps-result');
+            const playerScoreDisplay = document.getElementById('player-score');
+            const computerScoreDisplay = document.getElementById('computer-score');
+            const buttons = document.querySelectorAll('.rps-choice');
+
+            function computerPlay() {
+                return choices[Math.floor(Math.random() * choices.length)];
+            }
+
+            function playRound(playerSelection, computerSelection) {
+                if (playerSelection === computerSelection) {
+                    return "It's a tie!";
+                } else if (
+                    (playerSelection === 'rock' && computerSelection === 'scissors') ||
+                    (playerSelection === 'paper' && computerSelection === 'rock') ||
+                    (playerSelection === 'scissors' && computerSelection === 'paper')
+                ) {
+                    playerScore++;
+                    return "You win!";
+                } else {
+                    computerScore++;
+                    return "Computer wins!";
+                }
+            }
+
+            function updateScore() {
+                playerScoreDisplay.textContent = playerScore;
+                computerScoreDisplay.textContent = computerScore;
+            }
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const playerSelection = this.dataset.choice;
+                    const computerSelection = computerPlay();
+                    const result = playRound(playerSelection, computerSelection);
+                    resultDisplay.textContent = `You chose ${playerSelection}, computer chose ${computerSelection}. ${result}`;
+                    updateScore();
+                });
+            });
+        }
+    },
+    {
+        name: "Whack-a-Mole",
+        render: function() {
+            return `
+                <h2>Whack-a-Mole</h2>
+                <div id="whack-a-mole">
+                    <div id="game-board">
+                        ${Array(9).fill().map((_, i) => `<div class="mole-hole" id="hole-${i}"></div>`).join('')}
+                    </div>
+                    <p>Score: <span id="whack-score">0</span></p>
+                    <button id="start-whack">Start Game</button>
+                </div>
+            `;
+        },
+        init: function() {
+            const holes = document.querySelectorAll('.mole-hole');
+            const scoreDisplay = document.getElementById('whack-score');
+            const startButton = document.getElementById('start-whack');
+            let score = 0;
+            let timeUp = false;
+            let lastHole;
+
+            function randomTime(min, max) {
+                return Math.round(Math.random() * (max - min) + min);
+            }
+
+            function randomHole(holes) {
+                const idx = Math.floor(Math.random() * holes.length);
+                const hole = holes[idx];
+                if (hole === lastHole) {
+                    return randomHole(holes);
+                }
+                lastHole = hole;
+                return hole;
+            }
+
+            function peep() {
+                const time = randomTime(200, 1000);
+                const hole = randomHole(holes);
+                hole.classList.add('up');
+                setTimeout(() => {
+                    hole.classList.remove('up');
+                    if (!timeUp) peep();
+                }, time);
+            }
+
+            function startGame() {
+                scoreDisplay.textContent = 0;
+                timeUp = false;
+                score = 0;
+                peep();
+                setTimeout(() => timeUp = true, 10000);
+            }
+
+            function whack(e) {
+                if (!e.isTrusted) return;
+                score++;
+                this.classList.remove('up');
+                scoreDisplay.textContent = score;
+            }
+
+            holes.forEach(hole => hole.addEventListener('click', whack));
+            startButton.addEventListener('click', startGame);
+        }
+    },
+    {
+        name: "Puzzle Slider",
+        render: function() {
+            return `
+                <h2>Puzzle Slider</h2>
+                <div id="puzzle-slider">
+                    <div id="puzzle-board"></div>
+                    <button id="shuffle-puzzle">Shuffle</button>
+                </div>
+            `;
+        },
+        init: function() {
+            // Implement puzzle slider game logic here
+        }
+    },
+    {
+        name: "Simon Says",
+        render: function() {
+            return `
+                <h2>Simon Says</h2>
+                <div id="simon-game">
+                    <div id="simon-buttons">
+                        <div class="simon-button" id="green"></div>
+                        <div class="simon-button" id="red"></div>
+                        <div class="simon-button" id="yellow"></div>
+                        <div class="simon-button" id="blue"></div>
+                    </div>
+                    <button id="start-simon">Start Game</button>
+                    <button id="restart-simon" disabled>Restart Game</button>
+                    <p>Level: <span id="simon-level">0</span></p>
+                </div>
+            `;
+        },
+        init: function() {
+            const buttons = ['green', 'red', 'yellow', 'blue'];
+            let sequence = [];
+            let playerSequence = [];
+            let level = 0;
+            let gameActive = false;
+
+            const simonButtons = document.querySelectorAll('.simon-button');
+            const startButton = document.getElementById('start-simon');
+            const restartButton = document.getElementById('restart-simon');
+            const levelDisplay = document.getElementById('simon-level');
+
+            function startGame() {
+                sequence = [];
+                playerSequence = [];
+                level = 0;
+                gameActive = true;
+                startButton.disabled = true;
+                restartButton.disabled = false;
+                nextRound();
+            }
+
+            function restartGame() {
+                if (gameActive) {
+                    gameActive = false;
+                    setTimeout(startGame, 1000);
+                } else {
+                    startGame();
+                }
+            }
+
+            function nextRound() {
+                level++;
+                levelDisplay.textContent = level;
+                playerSequence = [];
+                addToSequence();
+                playSequence();
+            }
+
+            function addToSequence() {
+                const randomColor = buttons[Math.floor(Math.random() * buttons.length)];
+                sequence.push(randomColor);
+            }
+
+            function playSequence() {
+                disableButtons();
+                let i = 0;
+                const intervalId = setInterval(() => {
+                    if (i >= sequence.length) {
+                        clearInterval(intervalId);
+                        enableButtons();
+                        return;
+                    }
+                    const color = sequence[i];
+                    flashButton(color);
+                    i++;
+                }, 600);
+            }
+
+            function flashButton(color) {
+                const button = document.getElementById(color);
+                button.classList.add('active');
+                setTimeout(() => button.classList.remove('active'), 300);
+            }
+
+            function handleButtonClick(e) {
+                if (!gameActive) return;
+                const clickedColor = e.target.id;
+                playerSequence.push(clickedColor);
+                flashButton(clickedColor);
+
+                if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
+                    gameOver();
+                    return;
+                }
+
+                if (playerSequence.length === sequence.length) {
+                    disableButtons();
+                    setTimeout(nextRound, 1000);
+                }
+            }
+
+            function gameOver() {
+                gameActive = false;
+                alert(`Game Over! You reached level ${level}`);
+                startButton.disabled = false;
+            }
+
+            function disableButtons() {
+                simonButtons.forEach(button => button.removeEventListener('click', handleButtonClick));
+            }
+
+            function enableButtons() {
+                simonButtons.forEach(button => button.addEventListener('click', handleButtonClick));
+            }
+
+            startButton.addEventListener('click', startGame);
+            restartButton.addEventListener('click', restartGame);
+
+            // Add these styles to make the game more visually appealing
+            simonButtons.forEach(button => {
+                button.style.width = '150px';
+                button.style.height = '150px';
+                button.style.margin = '5px';
+                button.style.cursor = 'pointer';
+            });
+
+            // Add transition for smooth color change
+            const style = document.createElement('style');
+            style.textContent = `
+                .simon-button {
+                    transition: opacity 0.3s ease;
+                }
+                .simon-button.active {
+                    opacity: 1 !important;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Set initial opacity
+            document.getElementById('green').style.opacity = '0.6';
+            document.getElementById('red').style.opacity = '0.6';
+            document.getElementById('yellow').style.opacity = '0.6';
+            document.getElementById('blue').style.opacity = '0.6';
+        }
+    },
+    {
+        name: "Minesweeper",
+        render: function() {
+            return `
+                <h2>Minesweeper</h2>
+                <div id="minesweeper-game">
+                    <div id="minesweeper-board"></div>
+                    <button id="new-minesweeper-game">New Game</button>
+                </div>
+            `;
+        },
+        init: function() {
+            // Implement Minesweeper game logic here
+        }
+    },
+    {
+        name: "2048",
+        render: function() {
+            return `
+                <h2>2048</h2>
+                <div id="game-2048">
+                    <div id="game-header-2048">
+                        <div id="score-container-2048">
+                            <span>Score:</span>
+                            <span id="score-2048">0</span>
+                        </div>
+                        <button id="new-game-2048">New Game</button>
+                    </div>
+                    <div id="board-2048"></div>
+                </div>
+            `;
+        },
+        init: function() {
+            const board = document.getElementById('board-2048');
+            const scoreDisplay = document.getElementById('score-2048');
+            const newGameButton = document.getElementById('new-game-2048');
+            let grid = [];
+            let score = 0;
+
+            function initializeGrid() {
+                grid = Array(4).fill().map(() => Array(4).fill(0));
+                score = 0;
+                scoreDisplay.textContent = score;
+                addNewTile();
+                addNewTile();
+                updateBoard();
+            }
+
+            function addNewTile() {
+                let available = [];
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (grid[i][j] === 0) {
+                            available.push({x: i, y: j});
+                        }
+                    }
+                }
+                if (available.length > 0) {
+                    let randomSpot = available[Math.floor(Math.random() * available.length)];
+                    grid[randomSpot.x][randomSpot.y] = Math.random() < 0.9 ? 2 : 4;
+                }
+            }
+
+            function updateBoard() {
+                board.innerHTML = '';
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        let tile = document.createElement('div');
+                        tile.classList.add('tile');
+                        tile.dataset.row = i;
+                        tile.dataset.col = j;
+                        if (grid[i][j] !== 0) {
+                            tile.textContent = grid[i][j];
+                            tile.classList.add(`tile-${grid[i][j]}`);
+                        }
+                        board.appendChild(tile);
+                    }
+                }
+                scoreDisplay.textContent = score;
+            }
+
+            function move(direction) {
+                let moved = false;
+                let animations = [];
+
+                if (direction === 'left' || direction === 'right') {
+                    for (let i = 0; i < 4; i++) {
+                        let row = grid[i];
+                        let originalRow = [...row];
+                        if (direction === 'left') {
+                            row = row.filter(val => val !== 0);
+                            for (let j = 0; j < row.length - 1; j++) {
+                                if (row[j] === row[j+1]) {
+                                    row[j] *= 2;
+                                    score += row[j];
+                                    row.splice(j+1, 1);
+                                }
+                            }
+                            while (row.length < 4) row.push(0);
+                        } else {
+                            row = row.filter(val => val !== 0);
+                            for (let j = row.length - 1; j > 0; j--) {
+                                if (row[j] === row[j-1]) {
+                                    row[j] *= 2;
+                                    score += row[j];
+                                    row.splice(j-1, 1);
+                                    row.unshift(0);
+                                }
+                            }
+                            while (row.length < 4) row.unshift(0);
+                        }
+                        for (let j = 0; j < 4; j++) {
+                            if (row[j] !== originalRow[j]) {
+                                animations.push({from: {row: i, col: originalRow.indexOf(row[j])}, to: {row: i, col: j}});
+                            }
+                        }
+                        grid[i] = row;
+                        if (!moved && !arraysEqual(originalRow, row)) moved = true;
+                    }
+                } else {
+                    for (let j = 0; j < 4; j++) {
+                        let column = [grid[0][j], grid[1][j], grid[2][j], grid[3][j]];
+                        let originalColumn = [...column];
+                        if (direction === 'up') {
+                            column = column.filter(val => val !== 0);
+                            for (let i = 0; i < column.length - 1; i++) {
+                                if (column[i] === column[i+1]) {
+                                    column[i] *= 2;
+                                    score += column[i];
+                                    column.splice(i+1, 1);
+                                }
+                            }
+                            while (column.length < 4) column.push(0);
+                        } else {
+                            column = column.filter(val => val !== 0);
+                            for (let i = column.length - 1; i > 0; i--) {
+                                if (column[i] === column[i-1]) {
+                                    column[i] *= 2;
+                                    score += column[i];
+                                    column.splice(i-1, 1);
+                                    column.unshift(0);
+                                }
+                            }
+                            while (column.length < 4) column.unshift(0);
+                        }
+                        for (let i = 0; i < 4; i++) {
+                            if (column[i] !== originalColumn[i]) {
+                                animations.push({from: {row: originalColumn.indexOf(column[i]), col: j}, to: {row: i, col: j}});
+                            }
+                            grid[i][j] = column[i];
+                        }
+                        if (!moved && !arraysEqual(originalColumn, column)) moved = true;
+                    }
+                }
+                if (moved) {
+                    animateTiles(animations).then(() => {
+                        addNewTile();
+                        updateBoard();
+                        if (isGameOver()) {
+                            alert('Game Over!');
+                        }
+                    });
+                }
+            }
+
+            function animateTiles(animations) {
+                return new Promise(resolve => {
+                    animations.forEach(anim => {
+                        const tile = document.querySelector(`.tile[data-row="${anim.from.row}"][data-col="${anim.from.col}"]`);
+                        if (tile) {
+                            tile.style.transition = 'transform 0.2s ease-in-out';
+                            tile.style.transform = `translate(${(anim.to.col - anim.from.col) * 95}px, ${(anim.to.row - anim.from.row) * 95}px)`;
+                        }
+                    });
+                    setTimeout(resolve, 200);
+                });
+            }
+
+            function arraysEqual(arr1, arr2) {
+                return arr1.every((val, index) => val === arr2[index]);
+            }
+
+            function isGameOver() {
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (grid[i][j] === 0) return false;
+                        if (i < 3 && grid[i][j] === grid[i+1][j]) return false;
+                        if (j < 3 && grid[i][j] === grid[i][j+1]) return false;
+                    }
+                }
+                return true;
+            }
+
+            document.addEventListener('keydown', (e) => {
+                switch(e.key.toLowerCase()) {
+                    case 'a': case 'arrowleft': move('left'); break;
+                    case 'd': case 'arrowright': move('right'); break;
+                    case 'w': case 'arrowup': move('up'); break;
+                    case 's': case 'arrowdown': move('down'); break;
+                }
+            });
+
+            newGameButton.addEventListener('click', () => {
+                initializeGrid();
+            });
+
+            initializeGrid();
+        }
+    },
+    {
+        name: "Tetris",
+        render: function() {
+            return `
+                <h2>Tetris</h2>
+                <div id="tetris-game">
+                    <canvas id="tetris-canvas"></canvas>
+                    <div id="tetris-info">
+                        <p>Score: <span id="tetris-score">0</span></p>
+                        <p>Level: <span id="tetris-level">1</span></p>
+                        <button id="start-tetris">Start Game</button>
+                    </div>
+                </div>
+            `;
+        },
+        init: function() {
+            // Implement Tetris game logic here
+        }
+    },
+    {
+        name: "Flappy Bird",
+        render: function() {
+            return `
+                <h2>Flappy Bird</h2>
+                <div id="flappy-bird-game">
+                    <canvas id="flappy-canvas"></canvas>
+                    <p>Score: <span id="flappy-score">0</span></p>
+                    <button id="start-flappy">Start Game</button>
+                </div>
+            `;
+        },
+        init: function() {
+            // Implement Flappy Bird game logic here
+        }
+    },
+    {
+        name: "Sudoku",
+        render: function() {
+            return `
+                <h2>Sudoku</h2>
+                <div id="sudoku-game">
+                    <div id="sudoku-board"></div>
+                    <button id="check-sudoku">Check Solution</button>
+                    <button id="new-sudoku">New Game</button>
+                </div>
+            `;
+        },
+        init: function() {
+            // Implement Sudoku game logic here
+        }
     }
 ];
 
