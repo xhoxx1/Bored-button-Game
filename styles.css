@@ -275,37 +275,33 @@ body {
     }
 }
 
-/* Wordle Game Styles */
+/* Wordle Game styles */
 #wordle-game {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
     width: 100%;
     max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+    background-color: #bbada0;
+    border-radius: 6px;
+    padding: 20px;
 }
 
 #wordle-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
     margin-bottom: 20px;
 }
 
 #wordle-header h2 {
     margin: 0;
-    font-size: 2rem;
-    font-weight: bold;
-    color: #1a1a1b;
+    color: #776e65;
+    font-size: 24px;
 }
 
 #wordle-hint {
     padding: 8px 16px;
     font-size: 14px;
-    background-color: #538d4e;
+    background-color: #8f7a66;
     color: white;
     border: none;
     border-radius: 3px;
@@ -313,15 +309,17 @@ body {
 }
 
 #wordle-hint:hover {
-    background-color: #4a7d46;
+    background-color: #9f8b77;
 }
 
 #wordle-grid {
     display: grid;
     grid-template-rows: repeat(6, 1fr);
     gap: 5px;
-    margin-bottom: 20px;
-    width: 100%;
+    background-color: #cdc1b4;
+    border-radius: 6px;
+    padding: 10px;
+    aspect-ratio: 5 / 6;
 }
 
 .wordle-row {
@@ -331,21 +329,21 @@ body {
 }
 
 .wordle-cell {
-    width: 62px;
-    height: 62px;
-    border: 2px solid #d3d6da;
+    aspect-ratio: 1 / 1;
+    border: 2px solid #bbada0;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
+    font-size: clamp(1rem, 4vw, 2rem);
     font-weight: bold;
     text-transform: uppercase;
-    background-color: #ffffff;
-    color: #1a1a1b;
+    background-color: #eee4da;
+    color: #776e65;
+    border-radius: 3px;
 }
 
 .wordle-cell.filled {
-    border-color: #878a8c;
+    border-color: #776e65;
 }
 
 .wordle-cell.correct {
@@ -369,18 +367,18 @@ body {
 #wordle-keyboard {
     display: grid;
     grid-template-columns: repeat(20, 1fr);
-    gap: 6px;
-    width: 100%;
+    gap: 4px;
+    margin-top: 20px;
 }
 
 .keyboard-key {
     grid-column: span 2;
-    padding: 14px 0;
-    font-size: 13px;
+    padding: 10px 0;
+    font-size: 12px;
     font-weight: bold;
     border: none;
-    background-color: #d3d6da;
-    color: #1a1a1b;
+    background-color: #cdc1b4;
+    color: #776e65;
     cursor: pointer;
     border-radius: 4px;
     text-transform: uppercase;
@@ -392,7 +390,7 @@ body {
 }
 
 .keyboard-key:hover {
-    background-color: #bbbfc3;
+    background-color: #bbada0;
 }
 
 .keyboard-key.correct {
@@ -415,7 +413,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
-    color: #1a1a1b;
+    color: #776e65;
 }
 
 .game-over-overlay {
@@ -467,4 +465,19 @@ body {
         padding: 6px 12px;
         font-size: 12px;
     }
+}
+
+#backToDashboard {
+    font-size: 1rem;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#backToDashboard:hover {
+    background-color: #2980b9;
 }

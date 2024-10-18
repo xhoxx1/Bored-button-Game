@@ -9,12 +9,24 @@
 </head>
 <body>
     <header class="main-header">
-        <h1 id="message">Click the button to play a random game!</h1>
-        <button id="boredButton">Bored Button</button>
+        <h1>Bored Button Games</h1>
+        <button id="backToDashboard">Back to Dashboard</button>
     </header>
     <div class="container">
         <div id="gameContainer"></div>
     </div>
     <script src="script.js"></script>
+    <script>
+        document.getElementById('backToDashboard').addEventListener('click', () => {
+            window.location.href = 'dashboard.html';
+        });
+
+        // Automatically load a random game when the page loads
+        window.addEventListener('load', () => {
+            const randomGame = games[Math.floor(Math.random() * games.length)];
+            gameContainer.innerHTML = randomGame.render();
+            randomGame.init();
+        });
+    </script>
 </body>
 </html>

@@ -493,11 +493,12 @@ const games = [
     }
 ];
 
-const boredButton = document.getElementById('boredButton');
 const gameContainer = document.getElementById('gameContainer');
 
-boredButton.addEventListener('click', () => {
-    const randomGame = games[Math.floor(Math.random() * games.length)];
-    gameContainer.innerHTML = randomGame.render();
-    randomGame.init();
-});
+// Remove or comment out these lines:
+// const boredButton = document.getElementById('boredButton');
+// boredButton.addEventListener('click', () => {
+//     const randomGame = games[Math.floor(Math.random() * games.length)];
+//     gameContainer.innerHTML = randomGame.render();
+//     randomGame.init();
+// });
