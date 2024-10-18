@@ -1,5 +1,4 @@
-Game Generator Update 1.2
-
+Game Generator Update 2.0
 
 Let me know what games you want me to add
 
