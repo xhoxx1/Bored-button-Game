@@ -99,83 +99,155 @@ body {
     margin-bottom: 20px;
 }
 
+.game-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0;
+}
+
 #score-container-2048 {
     background-color: #bbada0;
     padding: 10px 15px;
     border-radius: 3px;
     color: white;
-    font-weight: bold;
-    text-align: center;
-    flex: 1;
 }
 
 .score-label {
     font-size: 14px;
     display: block;
-    text-transform: uppercase;
 }
 
 #score-2048 {
-    font-size: 20px;
-}
-
-.game-title {
-    font-size: 36px;
-    margin: 0;
-    color: #776e65;
-    flex: 1;
-    text-align: center;
-}
-
-#new-game-2048 {
-    background-color: #8f7a66;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
+    font-size: 24px;
     font-weight: bold;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    flex: 1;
-    text-align: center;
-}
-
-#new-game-2048:hover {
-    background-color: #9f8b76;
 }
 
 #board-2048 {
     background-color: #bbada0;
     border-radius: 6px;
-    padding: 15px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 15px;
+    padding: 5px;
+    position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
 }
 
 .grid-cell {
+    width: calc(25% - 10px);
+    height: calc(25% - 10px);
+    margin: 5px;
     background-color: rgba(238, 228, 218, 0.35);
+    float: left;
     border-radius: 3px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
+}
+
+.tile-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .tile {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    width: calc(25% - 10px);
+    height: calc(25% - 10px);
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: bold;
     border-radius: 3px;
+    transition: all 0.1s ease-in-out;
+    z-index: 10;
 }
 
-/* Add any additional styles for tile colors here */
+.new-tile {
+    animation: appear 0.2s ease-in-out;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#new-game-2048 {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #8f7a66;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#new-game-2048:hover {
+    background-color: #9f8b77;
+}
+
+/* Add styles for different tile values */
+.tile-2, .tile-4 {
+    background-color: #eee4da;
+    color: #776e65;
+    font-size: 35px;
+}
+.tile-4 { background-color: #ede0c8; }
+.tile-8 { 
+    background-color: #f2b179; 
+    color: #f9f6f2; 
+    font-size: 35px;
+}
+.tile-16 { 
+    background-color: #f59563; 
+    color: #f9f6f2; 
+    font-size: 35px;
+}
+.tile-32 { 
+    background-color: #f67c5f; 
+    color: #f9f6f2; 
+    font-size: 35px;
+}
+.tile-64 { 
+    background-color: #f65e3b; 
+    color: #f9f6f2; 
+    font-size: 35px;
+}
+.tile-128 { 
+    background-color: #edcf72; 
+    color: #f9f6f2; 
+    font-size: 30px;
+}
+.tile-256 { 
+    background-color: #edcc61; 
+    color: #f9f6f2; 
+    font-size: 30px;
+}
+.tile-512 { 
+    background-color: #edc850; 
+    color: #f9f6f2; 
+    font-size: 30px;
+}
+.tile-1024 { 
+    background-color: #edc53f; 
+    color: #f9f6f2; 
+    font-size: 25px;
+}
+.tile-2048 { 
+    background-color: #edc22e; 
+    color: #f9f6f2; 
+    font-size: 25px;
+}
+
+/* ... (remaining styles unchanged) */
 
 @media (max-width: 768px) {
     .main-header {
@@ -209,6 +281,39 @@ body {
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#wordle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#wordle-header h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1a1a1b;
+}
+
+#wordle-hint {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #538d4e;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#wordle-hint:hover {
+    background-color: #4a7d46;
 }
 
 #wordle-grid {
@@ -216,6 +321,7 @@ body {
     grid-template-rows: repeat(6, 1fr);
     gap: 5px;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .wordle-row {
@@ -227,41 +333,43 @@ body {
 .wordle-cell {
     width: 62px;
     height: 62px;
-    border: 2px solid #3a3a3c;
+    border: 2px solid #d3d6da;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 2rem;
     font-weight: bold;
     text-transform: uppercase;
-    background-color: #121213;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #1a1a1b;
 }
 
 .wordle-cell.filled {
-    border-color: #565758;
+    border-color: #878a8c;
 }
 
 .wordle-cell.correct {
-    background-color: #538d4e;
-    border-color: #538d4e;
+    background-color: #6aaa64;
+    border-color: #6aaa64;
+    color: #ffffff;
 }
 
 .wordle-cell.present {
-    background-color: #b59f3b;
-    border-color: #b59f3b;
+    background-color: #c9b458;
+    border-color: #c9b458;
+    color: #ffffff;
 }
 
 .wordle-cell.absent {
-    background-color: #3a3a3c;
-    border-color: #3a3a3c;
+    background-color: #787c7e;
+    border-color: #787c7e;
+    color: #ffffff;
 }
 
 #wordle-keyboard {
     display: grid;
     grid-template-columns: repeat(20, 1fr);
     gap: 6px;
-    max-width: 500px;
     width: 100%;
 }
 
@@ -271,8 +379,8 @@ body {
     font-size: 13px;
     font-weight: bold;
     border: none;
-    background-color: #818384;
-    color: #ffffff;
+    background-color: #d3d6da;
+    color: #1a1a1b;
     cursor: pointer;
     border-radius: 4px;
     text-transform: uppercase;
@@ -284,19 +392,22 @@ body {
 }
 
 .keyboard-key:hover {
-    background-color: #6e6e6e;
+    background-color: #bbbfc3;
 }
 
 .keyboard-key.correct {
-    background-color: #538d4e;
+    background-color: #6aaa64;
+    color: #ffffff;
 }
 
 .keyboard-key.present {
-    background-color: #b59f3b;
+    background-color: #c9b458;
+    color: #ffffff;
 }
 
 .keyboard-key.absent {
-    background-color: #3a3a3c;
+    background-color: #787c7e;
+    color: #ffffff;
 }
 
 #wordle-message {
@@ -304,36 +415,56 @@ body {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
-    color: #ffffff;
+    color: #1a1a1b;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-    .wordle-cell {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-    }
-
-    #wordle-keyboard {
-        grid-template-columns: repeat(10, 1fr);
-    }
-
-    #wordle-keyboard button {
-        padding: 8px 3px;
-        font-size: 14px;
-    }
+.game-over-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-@media (max-width: 400px) {
+.game-over-modal {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+#play-again {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #538d4e;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#play-again:hover {
+    background-color: #4a7d46;
+}
+
+@media (max-width: 500px) {
     .wordle-cell {
-        width: 30px;
-        height: 30px;
-        font-size: 16px;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
     }
 
-    #wordle-keyboard button {
-        padding: 6px 2px;
+    #wordle-header h2 {
+        font-size: 1.5rem;
+    }
+
+    #wordle-hint {
+        padding: 6px 12px;
         font-size: 12px;
     }
 }
