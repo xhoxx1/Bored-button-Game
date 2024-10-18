@@ -1,316 +1,95 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-header {
+    background-color: #34495e;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#message {
+    font-size: 1.5rem;
+    margin: 0;
+    max-width: 60%;
+}
+
+#boredButton {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#boredButton:hover {
+    background-color: #c0392b;
+}
+
+.container {
+    flex-grow: 1;
+    padding: 20px;
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #121212;
-    color: #ffffff;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 30px;
-    background-color: #1e1e1e;
-    color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-h1, h2 {
-    margin: 0;
-}
-
-section {
-    margin-bottom: 40px;
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 10px 0;
-    background-color: #333333;
-    color: #ffffff;
-    border: none;
-    border-radius: 3px;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #4a4a4a;
-}
-
-#drawing-canvas, #snake-canvas {
-    border: 1px solid #ffffff;
-    display: block;
-    margin: 20px auto;
-    background-color: #2c2c2c;
-}
-
-#color-picker {
-    margin-left: 10px;
-    background-color: #2c2c2c;
-    border: none;
-}
-
-#tictactoe-board {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-    width: 300px;
-    margin: 20px auto;
-}
-
-.cell {
-    width: 100px;
-    height: 100px;
-    border: 1px solid #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    cursor: pointer;
-    background-color: #2c2c2c;
-    transition: background-color 0.3s ease;
-}
-
-.cell:hover {
-    background-color: #3a3a3a;
-}
-
-#memory-board {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.card {
-    aspect-ratio: 1 / 1;
-    perspective: 1000px;
-    cursor: pointer;
-}
-
-.card-inner {
     width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
 }
 
-.card.flipped .card-inner {
-    transform: rotateY(180deg);
-}
-
-.card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2em;
-    border-radius: 5px;
-}
-
-.card-front {
-    background-color: #2c3e50;
-}
-
-.card-back {
-    background-color: #3498db;
-    transform: rotateY(180deg);
-}
-
-#reset-memory {
-    display: block;
-    margin: 20px auto;
-}
-
-#game-status {
-    text-align: center;
-    font-weight: bold;
+#gameContainer {
+    background-color: #34495e;
+    border-radius: 10px;
+    padding: 20px;
     margin-top: 20px;
 }
 
-#back-to-main {
-    display: block;
-    margin: 20px auto;
-}
-
-#game-generator {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
-}
-
-#generate-game {
-    font-size: 24px;
-    padding: 15px 30px;
-}
-
-/* Add these new styles at the end of your existing CSS file */
-
-.generate-button-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-}
-
-#generate-game {
-    font-size: 18px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#generate-game:hover {
-    background-color: #45a049;
-}
-
-#user-info {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: white;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
-    margin: 0 auto;
-}
-
-input {
-    margin-bottom: 10px;
-    padding: 5px;
-}
-
-button {
-    margin-top: 10px;
-}
-
-#login, #signup, #logout {
-    margin: 10px;
-}
-
-/* Hangman styles */
-#hangman-game {
-    text-align: center;
-}
-
-#word-display {
-    font-size: 24px;
-    letter-spacing: 5px;
-    margin-bottom: 20px;
-}
-
-#guess-input {
-    width: 30px;
-    text-align: center;
-    margin-right: 10px;
+/* Guess the Number styles */
+#guessInput {
+    font-size: 1rem;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 /* Rock Paper Scissors styles */
-#rps-game {
-    text-align: center;
+#rock, #paper, #scissors {
+    margin: 0 0.5rem;
 }
 
-.rps-choice {
-    font-size: 18px;
-    margin: 0 10px;
-}
-
-/* Whack-a-Mole styles */
-#game-board {
+/* Memory Game styles */
+#memoryBoard {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    max-width: 300px;
-    margin: 0 auto;
+    margin-top: 1rem;
 }
 
-.mole-hole {
-    width: 100px;
-    height: 100px;
-    border: 2px solid #333;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-}
-
-.mole-hole.up::after {
-    content: '';
-    display: block;
-    width: 70%;
-    height: 70%;
-    background-color: #8B4513;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 0;
-    left: 15%;
-    transition: bottom 0.1s;
-}
-
-.mole-hole.up::after {
-    bottom: 50%;
-}
-
-/* Puzzle Slider styles */
-#puzzle-board {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-    width: 300px;
-    height: 300px;
-    margin: 0 auto;
-}
-
-/* Simon Says styles */
-#simon-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    width: 320px;
-    height: 320px;
-    margin: 0 auto;
-}
-
-.simon-button {
-    border-radius: 50%;
+.card {
+    width: 80px;
+    height: 80px;
+    background-color: #34495e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
     cursor: pointer;
 }
 
-#green { background-color: #00a86b; }
-#red { background-color: #ff0000; }
-#yellow { background-color: #ffd700; }
-#blue { background-color: #0000ff; }
-
-/* Minesweeper styles */
-#minesweeper-board {
-    display: grid;
-    grid-template-columns: repeat(10, 30px);
-    gap: 1px;
-    margin: 0 auto;
-}
-
-/* 2048 styles */
+/* 2048 Game styles */
 #game-2048 {
-    width: 400px;
+    width: 100%;
+    max-width: 500px;
     margin: 0 auto;
-    text-align: center;
 }
 
 #game-header-2048 {
@@ -321,126 +100,240 @@ button {
 }
 
 #score-container-2048 {
-    font-size: 18px;
+    background-color: #bbada0;
+    padding: 10px 15px;
+    border-radius: 3px;
+    color: white;
     font-weight: bold;
-    color: #776e65;
+    text-align: center;
+    flex: 1;
+}
+
+.score-label {
+    font-size: 14px;
+    display: block;
+    text-transform: uppercase;
 }
 
 #score-2048 {
-    display: block;
-    font-size: 24px;
+    font-size: 20px;
 }
 
-#board-2048 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 15px;
-    background-color: #bbada0;
-    border-radius: 5px;
-    padding: 15px;
-    position: relative;
-}
-
-.tile {
-    width: 80px;
-    height: 80px;
-    border-radius: 3px;
-    background-color: #cdc1b4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 32px;
-    font-weight: bold;
+.game-title {
+    font-size: 36px;
+    margin: 0;
     color: #776e65;
-    position: absolute;
-    transition: transform 0.2s ease-in-out;
+    flex: 1;
+    text-align: center;
 }
-
-.tile[data-row="0"] { top: 15px; }
-.tile[data-row="1"] { top: 110px; }
-.tile[data-row="2"] { top: 205px; }
-.tile[data-row="3"] { top: 300px; }
-
-.tile[data-col="0"] { left: 15px; }
-.tile[data-col="1"] { left: 110px; }
-.tile[data-col="2"] { left: 205px; }
-.tile[data-col="3"] { left: 300px; }
-
-.tile-2 { background-color: #eee4da; }
-.tile-4 { background-color: #ede0c8; }
-.tile-8 { background-color: #f2b179; color: #f9f6f2; }
-.tile-16 { background-color: #f59563; color: #f9f6f2; }
-.tile-32 { background-color: #f67c5f; color: #f9f6f2; }
-.tile-64 { background-color: #f65e3b; color: #f9f6f2; }
-.tile-128 { background-color: #edcf72; color: #f9f6f2; font-size: 28px; }
-.tile-256 { background-color: #edcc61; color: #f9f6f2; font-size: 28px; }
-.tile-512 { background-color: #edc850; color: #f9f6f2; font-size: 28px; }
-.tile-1024 { background-color: #edc53f; color: #f9f6f2; font-size: 24px; }
-.tile-2048 { background-color: #edc22e; color: #f9f6f2; font-size: 24px; }
 
 #new-game-2048 {
     background-color: #8f7a66;
-    color: #f9f6f2;
+    color: white;
     border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
     border-radius: 3px;
-    padding: 10px 20px;
-    font-size: 18px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex: 1;
+    text-align: center;
 }
 
 #new-game-2048:hover {
-    background-color: #9f8b77;
+    background-color: #9f8b76;
 }
 
-/* Tetris styles */
-#tetris-canvas {
-    border: 1px solid #ffffff;
-    margin: 0 auto;
-    display: block;
-}
-
-/* Flappy Bird styles */
-#flappy-canvas {
-    border: 1px solid #ffffff;
-    margin: 0 auto;
-    display: block;
-}
-
-/* Sudoku styles */
-#sudoku-board {
+#board-2048 {
+    background-color: #bbada0;
+    border-radius: 6px;
+    padding: 15px;
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    gap: 1px;
-    width: 450px;
-    height: 450px;
-    margin: 0 auto;
-    background-color: #333;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
 }
 
-.sudoku-cell {
-    background-color: #fff;
+.grid-cell {
+    background-color: rgba(238, 228, 218, 0.35);
+    border-radius: 3px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 20px;
-    color: #000;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
 }
 
-.sudoku-cell:nth-child(3n) {
-    border-right: 2px solid #000;
+.tile {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
 }
 
-.sudoku-cell:nth-child(9n) {
-    border-right: none;
+/* Add any additional styles for tile colors here */
+
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #message {
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
 }
 
-.sudoku-cell:nth-child(n+19):nth-child(-n+27),
-.sudoku-cell:nth-child(n+46):nth-child(-n+54) {
-    border-bottom: 2px solid #000;
+/* Add media query for responsiveness */
+@media (max-width: 500px) {
+    #game-header-2048 {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #score-container-2048,
+    .game-title,
+    #new-game-2048 {
+        margin-bottom: 10px;
+    }
 }
 
-#start-simon, #restart-simon {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
+/* Wordle Game Styles */
+#wordle-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#wordle-grid {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.wordle-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+}
+
+.wordle-cell {
+    width: 62px;
+    height: 62px;
+    border: 2px solid #3a3a3c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #121213;
+    color: #ffffff;
+}
+
+.wordle-cell.filled {
+    border-color: #565758;
+}
+
+.wordle-cell.correct {
+    background-color: #538d4e;
+    border-color: #538d4e;
+}
+
+.wordle-cell.present {
+    background-color: #b59f3b;
+    border-color: #b59f3b;
+}
+
+.wordle-cell.absent {
+    background-color: #3a3a3c;
+    border-color: #3a3a3c;
+}
+
+#wordle-keyboard {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: 6px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.keyboard-key {
+    grid-column: span 2;
+    padding: 14px 0;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    background-color: #818384;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.keyboard-key.enter-key,
+.keyboard-key.backspace-key {
+    grid-column: span 3;
+}
+
+.keyboard-key:hover {
+    background-color: #6e6e6e;
+}
+
+.keyboard-key.correct {
+    background-color: #538d4e;
+}
+
+.keyboard-key.present {
+    background-color: #b59f3b;
+}
+
+.keyboard-key.absent {
+    background-color: #3a3a3c;
+}
+
+#wordle-message {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .wordle-cell {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    #wordle-keyboard {
+        grid-template-columns: repeat(10, 1fr);
+    }
+
+    #wordle-keyboard button {
+        padding: 8px 3px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .wordle-cell {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    #wordle-keyboard button {
+        padding: 6px 2px;
+        font-size: 12px;
+    }
 }
