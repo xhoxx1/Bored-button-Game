@@ -21,6 +21,7 @@ body {
 #message {
     font-size: 1.5rem;
     margin: 0;
+    flex-grow: 1;
 }
 
 #headerButton {
@@ -64,10 +65,80 @@ body {
 }
 
 /* Guess the Number styles */
-#guessInput {
+#guess-the-number-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #faf8ef;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+#guess-the-number-container h2 {
+    color: #776e65;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+#guess-the-number-container p {
+    color: #776e65;
     font-size: 1rem;
-    padding: 0.5rem;
-    margin-right: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#guessInput {
+    width: calc(100% - 20px);
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    border: 2px solid #bbada0;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#guessButton, #newGameButton {
+    background-color: #8f7a66;
+    color: #f9f6f2;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+#guessButton:hover, #newGameButton:hover {
+    background-color: #776e65;
+}
+
+#guessResult {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #776e65;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    #guess-the-number-container {
+        padding: 15px;
+    }
+
+    #guess-the-number-container h2 {
+        font-size: 1.5rem;
+    }
+
+    #guessInput, #guessButton, #newGameButton {
+        font-size: 0.9rem;
+    }
+
+    #guessResult {
+        font-size: 1rem;
+    }
 }
 
 /* Rock Paper Scissors styles */
@@ -76,22 +147,72 @@ body {
 }
 
 /* Memory Game styles */
+#memory-game-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #faf8ef;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
 #memoryBoard {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 15px;
     margin-top: 1rem;
+    perspective: 1000px;
 }
 
-.card {
-    width: 80px;
-    height: 80px;
-    background-color: #34495e;
+.memory-card {
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+}
+
+.memory-card-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.memory-card.flipped .memory-card-inner {
+    transform: rotateY(180deg);
+}
+
+.memory-card-front,
+.memory-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
-    cursor: pointer;
+    font-size: 4rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.memory-card-front {
+    background-color: #bbada0;
+}
+
+.memory-card-back {
+    background-color: #eee4da;
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched .memory-card-back {
+    background-color: #6aaa64;
+}
+
+#memoryScore {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    color: #776e65;
 }
 
 /* 2048 Game styles */
@@ -132,6 +253,22 @@ body {
 
 #score-2048 {
     font-size: 24px;
+}
+
+#new-game-2048 {
+    background-color: #8f7a66;
+    color: #f9f6f2;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#new-game-2048:hover {
+    background-color: #7c6957;
 }
 
 #board-2048 {
@@ -224,8 +361,12 @@ body {
     }
 
     #message {
-        max-width: 100%;
         margin-bottom: 15px;
+    }
+
+    #headerButton {
+        width: 100%;
+        justify-content: center;
     }
 }
 
@@ -241,53 +382,23 @@ body {
     #new-game-2048 {
         margin-bottom: 10px;
     }
+
+    #new-game-2048 {
+        width: 100%;
+    }
 }
 
 /* Wordle Game styles */
 #wordle-game {
-    width: 100%;
-    max-width: 500px;
+    max-width: 350px;
     margin: 0 auto;
-    background-color: #bbada0;
-    border-radius: 6px;
-    padding: 20px;
-}
-
-#wordle-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-#wordle-header h2 {
-    margin: 0;
-    color: #776e65;
-    font-size: 24px;
-}
-
-#wordle-hint {
-    padding: 8px 16px;
-    font-size: 14px;
-    background-color: #8f7a66;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-#wordle-hint:hover {
-    background-color: #9f8b77;
 }
 
 #wordle-grid {
     display: grid;
     grid-template-rows: repeat(6, 1fr);
     gap: 5px;
-    background-color: #cdc1b4;
-    border-radius: 6px;
-    padding: 10px;
-    aspect-ratio: 5 / 6;
+    margin-bottom: 20px;
 }
 
 .wordle-row {
@@ -310,27 +421,10 @@ body {
     border-radius: 3px;
 }
 
-.wordle-cell.filled {
-    border-color: #776e65;
-}
-
-.wordle-cell.correct {
-    background-color: #6aaa64;
-    border-color: #6aaa64;
-    color: #ffffff;
-}
-
-.wordle-cell.present {
-    background-color: #c9b458;
-    border-color: #c9b458;
-    color: #ffffff;
-}
-
-.wordle-cell.absent {
-    background-color: #787c7e;
-    border-color: #787c7e;
-    color: #ffffff;
-}
+.wordle-cell.filled { border-color: #776e65; }
+.wordle-cell.correct { background-color: #6aaa64; border-color: #6aaa64; color: #ffffff; }
+.wordle-cell.present { background-color: #c9b458; border-color: #c9b458; color: #ffffff; }
+.wordle-cell.absent { background-color: #787c7e; border-color: #787c7e; color: #ffffff; }
 
 #wordle-keyboard {
     display: grid;
@@ -357,103 +451,219 @@ body {
     grid-column: span 3;
 }
 
-.keyboard-key:hover {
-    background-color: #bbada0;
-}
+.keyboard-key:hover { background-color: #bbada0; }
+.keyboard-key.correct { background-color: #6aaa64; color: #ffffff; }
+.keyboard-key.present { background-color: #c9b458; color: #ffffff; }
+.keyboard-key.absent { background-color: #787c7e; color: #ffffff; }
 
-.keyboard-key.correct {
-    background-color: #6aaa64;
-    color: #ffffff;
-}
-
-.keyboard-key.present {
-    background-color: #c9b458;
-    color: #ffffff;
-}
-
-.keyboard-key.absent {
-    background-color: #787c7e;
-    color: #ffffff;
+#wordle-result {
+    display: none; /* Hide by default */
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #wordle-message {
-    margin-top: 20px;
     font-size: 18px;
     font-weight: bold;
-    text-align: center;
     color: #776e65;
+    margin-bottom: 10px;
 }
 
-.game-over-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.game-over-modal {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-}
-
-#play-again {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
+#wordle-restart {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
     background-color: #538d4e;
     color: white;
     border: none;
     border-radius: 3px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-#play-again:hover {
+#wordle-restart:hover {
     background-color: #4a7d46;
+}
+
+/* Wordle statistics styles */
+#wordle-stats {
+    background-color: #bbada0;
+    border-radius: 6px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#wordle-stats h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #776e65;
+    font-size: 1.2em;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    background-color: #eee4da;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #776e65;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #776e65;
+    margin-top: 5px;
+    text-transform: uppercase;
 }
 
 @media (max-width: 500px) {
     .wordle-cell {
-        width: 50px;
-        height: 50px;
         font-size: 1.5rem;
     }
 
-    #wordle-header h2 {
-        font-size: 1.5rem;
+    #wordle-keyboard {
+        grid-template-columns: repeat(10, 1fr);
     }
 
-    #wordle-hint {
-        padding: 6px 12px;
-        font-size: 12px;
+    .keyboard-key {
+        grid-column: span 1;
+        font-size: 10px;
+        padding: 8px 0;
+    }
+
+    .keyboard-key.enter-key,
+    .keyboard-key.backspace-key {
+        grid-column: span 2;
     }
 }
 
-#new-game-2048 {
-    background-color: #8f7a66;
-    border: none;
-    border-radius: 3px;
-    padding: 10px 20px;
+/* ... (keep the rest of the existing styles) ... */
+
+#wordle-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#wordle-result {
+    display: none; /* Hide by default */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#wordle-message {
     font-size: 18px;
     font-weight: bold;
-    color: #f9f6f2;
+    color: #776e65;
+    margin-bottom: 10px;
+}
+
+#wordle-restart {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #538d4e;
+    color: white;
+    border: none;
+    border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#new-game-2048:hover {
-    background-color: #9f8b77;
+#wordle-restart:hover {
+    background-color: #4a7d46;
 }
 
-#new-game-2048:active {
-    background-color: #7f6a56;
-    transform: translateY(2px);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+/* Responsive design for smaller screens */
+@media (max-width: 1200px) {
+    #memoryBoard {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    #memoryBoard {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .memory-card-front,
+    .memory-card-back {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #memoryBoard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .memory-card-front,
+    .memory-card-back {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    #memory-game-container {
+        max-width: 95%;
+    }
+
+    .memory-card-front,
+    .memory-card-back {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 400px) {
+    #memoryBoard {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .memory-card-front,
+    .memory-card-back {
+        font-size: 2.5rem;
+    }
+}
+
+/* Add this to your existing styles.css file */
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#feedbackButton {
+    font-size: 1.2rem;
+    padding: 15px 30px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#feedbackButton:hover {
+    background-color: #2980b9;
+}
+
+@media (max-width: 768px) {
+    .header-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
