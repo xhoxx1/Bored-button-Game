@@ -51,17 +51,14 @@ const games = [
             return `
                 <div id="game-2048">
                     <div id="game-header-2048">
-                        <h2 class="game-title">2048</h2>
                         <div id="score-container-2048">
                             <span class="score-label">Score</span>
                             <span id="score-2048">0</span>
                         </div>
+                        <h2 class="game-title">2048</h2>
+                        <button id="new-game-2048">New Game</button>
                     </div>
-                    <div id="board-2048">
-                        ${Array(16).fill().map(() => '<div class="grid-cell"></div>').join('')}
-                        <div class="tile-container"></div>
-                    </div>
-                    <button id="new-game-2048">New Game</button>
+                    <div id="board-2048"></div>
                 </div>
             `;
         },
@@ -72,17 +69,17 @@ const games = [
             let grid = [];
             let score = 0;
 
-            // In the 2048 game object, add a new variable to track the last move time
-            let lastMoveTime = 0;
-            const moveCooldown = 100; // 100ms cooldown between moves
-
             function initializeGrid() {
                 grid = Array(4).fill().map(() => Array(4).fill(0));
                 score = 0;
-                scoreDisplay.textContent = score;
+                updateScore();
                 addNewTile();
                 addNewTile();
                 renderBoard();
+            }
+
+            function updateScore() {
+                scoreDisplay.textContent = score;
             }
 
             function addNewTile() {
@@ -97,62 +94,64 @@ const games = [
                 if (emptyTiles.length > 0) {
                     const {i, j} = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
                     grid[i][j] = Math.random() < 0.9 ? 2 : 4;
-                    const tile = createTileElement(i, j, grid[i][j]);
-                    tile.classList.add('new-tile');
-                    board.querySelector('.tile-container').appendChild(tile);
                 }
-            }
-
-            function createTileElement(row, col, value) {
-                const tile = document.createElement('div');
-                tile.className = `tile tile-${value}`;
-                tile.textContent = value;
-                tile.style.top = `calc(${row * 25}% + 5px)`;
-                tile.style.left = `calc(${col * 25}% + 5px)`;
-                return tile;
             }
 
             function renderBoard() {
-                const tileContainer = board.querySelector('.tile-container');
-                if (!tileContainer) {
-                    const container = document.createElement('div');
-                    container.className = 'tile-container';
-                    board.appendChild(container);
-                }
-                board.querySelector('.tile-container').innerHTML = '';
+                board.innerHTML = '';
                 for (let i = 0; i < 4; i++) {
                     for (let j = 0; j < 4; j++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'grid-cell';
+                        board.appendChild(cell);
                         if (grid[i][j] !== 0) {
-                            board.querySelector('.tile-container').appendChild(createTileElement(i, j, grid[i][j]));
+                            const tile = document.createElement('div');
+                            tile.className = `tile tile-${grid[i][j]}`;
+                            tile.textContent = grid[i][j];
+                            positionTile(tile, i, j);
+                            board.appendChild(tile);
                         }
                     }
                 }
-                scoreDisplay.textContent = score;
             }
 
-            function getTileColor(value) {
-                const colors = {
-                    2: '#eee4da',
-                    4: '#ede0c8',
-                    8: '#f2b179',
-                    16: '#f59563',
-                    32: '#f67c5f',
-                    64: '#f65e3b',
-                    128: '#edcf72',
-                    256: '#edcc61',
-                    512: '#edc850',
-                    1024: '#edc53f',
-                    2048: '#edc22e'
-                };
-                return colors[value] || '#3c3a32';
+            function updateTiles() {
+                const tiles = board.querySelectorAll('.tile');
+                tiles.forEach(tile => {
+                    const value = parseInt(tile.textContent);
+                    for (let i = 0; i < 4; i++) {
+                        for (let j = 0; j < 4; j++) {
+                            if (grid[i][j] === value) {
+                                positionTile(tile, i, j);
+                                return;
+                            }
+                        }
+                    }
+                });
             }
+
+            function positionTile(tile, row, col) {
+                const cellSize = (board.clientWidth - 75) / 4; // 75px is total gap (15px * 5)
+                const left = 15 + col * (cellSize + 15);
+                const top = 15 + row * (cellSize + 15);
+                tile.style.left = `${left}px`;
+                tile.style.top = `${top}px`;
+            }
+
+            // Add this function to handle window resizing
+            function handleResize() {
+                const tiles = board.querySelectorAll('.tile');
+                tiles.forEach(tile => {
+                    const row = parseInt(tile.style.top) / (tile.offsetHeight + 15);
+                    const col = parseInt(tile.style.left) / (tile.offsetWidth + 15);
+                    positionTile(tile, row, col);
+                });
+            }
+
+            // Add event listener for window resize
+            window.addEventListener('resize', handleResize);
 
             function move(direction) {
-                const currentTime = Date.now();
-                if (currentTime - lastMoveTime < moveCooldown) {
-                    return; // Exit if not enough time has passed since the last move
-                }
-
                 let moved = false;
                 const newGrid = grid.map(row => [...row]);
 
@@ -161,8 +160,9 @@ const games = [
                     for (let i = 0; i < newRow.length - 1; i++) {
                         if (newRow[i] === newRow[i + 1]) {
                             newRow[i] *= 2;
-                            score += newRow[i];
+                            score += newRow[i]; // Update score when tiles merge
                             newRow.splice(i + 1, 1);
+                            moved = true;
                         }
                     }
                     while (newRow.length < 4) {
@@ -195,50 +195,17 @@ const games = [
                 }
 
                 if (moved) {
-                    lastMoveTime = currentTime; // Update the last move time
-                    animateMove(grid, newGrid, direction);
                     grid = newGrid;
-                    addNewTile();
-                    if (isGameOver()) {
-                        setTimeout(() => alert('Game Over!'), 300);
-                    }
-                }
-            }
-
-            function animateMove(oldGrid, newGrid, direction) {
-                const tiles = board.querySelectorAll('.tile');
-                tiles.forEach(tile => {
-                    const row = (parseInt(tile.style.top) - 5) / 25;
-                    const col = (parseInt(tile.style.left) - 5) / 25;
-                    const value = parseInt(tile.textContent);
-
-                    let newRow = row;
-                    let newCol = col;
-
-                    // Find new position
-                    for (let i = 0; i < 4; i++) {
-                        for (let j = 0; j < 4; j++) {
-                            if (newGrid[i][j] === value && oldGrid[i][j] !== value) {
-                                newRow = i;
-                                newCol = j;
-                                break;
-                            }
+                    updateScore(); // Update score display
+                    updateTiles();
+                    setTimeout(() => {
+                        addNewTile();
+                        renderBoard();
+                        if (isGameOver()) {
+                            setTimeout(() => alert('Game Over! Your score: ' + score), 200);
                         }
-                    }
-
-                    if (newRow !== row || newCol !== col) {
-                        tile.style.zIndex = '10';
-                        tile.style.transition = 'all 0.2s ease-in-out';
-                        tile.style.top = `calc(${newRow * 25}% + 5px)`;
-                        tile.style.left = `calc(${newCol * 25}% + 5px)`;
-
-                        setTimeout(() => {
-                            tile.remove();
-                        }, 200);
-                    }
-                });
-
-                setTimeout(renderBoard, 210);
+                    }, 100);
+                }
             }
 
             function arraysEqual(a, b) {
@@ -281,6 +248,7 @@ const games = [
             // Clean up event listeners when switching games
             return () => {
                 window.removeEventListener('keydown', handleKeydown);
+                window.removeEventListener('resize', handleResize);
             };
         }
     },
@@ -289,10 +257,6 @@ const games = [
         render: function() {
             return `
                 <div id="wordle-game">
-                    <div id="wordle-header">
-                        <h2>Wordle</h2>
-                        <button id="wordle-hint">Hint</button>
-                    </div>
                     <div id="wordle-grid"></div>
                     <div id="wordle-keyboard"></div>
                 </div>
@@ -306,12 +270,10 @@ const games = [
             const maxAttempts = 6;
             let currentGuess = '';
             let gameOver = false;
-            let revealedHints = new Set();
 
             const grid = document.getElementById('wordle-grid');
             const keyboard = document.getElementById('wordle-keyboard');
             const message = document.getElementById('wordle-message');
-            const hintButton = document.getElementById('wordle-hint');
 
             // Create grid
             for (let i = 0; i < maxAttempts; i++) {
@@ -335,7 +297,6 @@ const games = [
                 const button = document.createElement('button');
                 button.textContent = key;
                 button.className = 'keyboard-key';
-                button.dataset.key = key;
                 if (key === 'Enter') button.classList.add('enter-key');
                 if (key === '⌫') button.classList.add('backspace-key');
                 button.addEventListener('click', () => handleInput(key));
@@ -349,7 +310,7 @@ const games = [
                     if (currentGuess.length === 5) submitGuess();
                 } else if (key === '⌫') {
                     currentGuess = currentGuess.slice(0, -1);
-                } else if (currentGuess.length < 5 && key.length === 1) {
+                } else if (currentGuess.length < 5) {
                     currentGuess += key;
                 }
                 updateGrid();
@@ -409,72 +370,16 @@ const games = [
 
                 if (correctCount === 5) {
                     gameOver = true;
-                    message.textContent = 'Splendid!';
-                    showGameOverMessage(true);
+                    message.textContent = 'Congratulations! You guessed the word!';
                 } else if (attempts === maxAttempts) {
                     gameOver = true;
-                    message.textContent = `The word was ${word}.`;
-                    showGameOverMessage(false);
-                }
-            }
-
-            function showGameOverMessage(won) {
-                const overlay = document.createElement('div');
-                overlay.className = 'game-over-overlay';
-                overlay.innerHTML = `
-                    <div class="game-over-modal">
-                        <h2>${won ? 'Congratulations!' : 'Game Over'}</h2>
-                        <p>${won ? 'You guessed the word!' : `The word was ${word}.`}</p>
-                        <button id="play-again">Play Again</button>
-                    </div>
-                `;
-                document.body.appendChild(overlay);
-                document.getElementById('play-again').addEventListener('click', () => {
-                    document.body.removeChild(overlay);
-                    resetGame();
-                });
-            }
-
-            function resetGame() {
-                attempts = 0;
-                currentGuess = '';
-                gameOver = false;
-                revealedHints.clear();
-                message.textContent = '';
-                grid.innerHTML = '';
-                keyboard.querySelectorAll('.keyboard-key').forEach(key => {
-                    key.classList.remove('correct', 'present', 'absent');
-                });
-                init();
-            }
-
-            function giveHint() {
-                if (gameOver || revealedHints.size === word.length) return;
-
-                let availableIndices = [];
-                for (let i = 0; i < word.length; i++) {
-                    if (!revealedHints.has(i)) {
-                        availableIndices.push(i);
-                    }
-                }
-
-                if (availableIndices.length > 0) {
-                    const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-                    revealedHints.add(randomIndex);
-
-                    const hintLetter = word[randomIndex];
-                    message.textContent = `Hint: The letter "${hintLetter}" is in position ${randomIndex + 1}`;
-
-                    // Update the current row with the hint
-                    const currentRow = grid.children[attempts];
-                    const cell = currentRow.children[randomIndex];
-                    cell.textContent = hintLetter;
-                    currentGuess = currentGuess.slice(0, randomIndex) + hintLetter + currentGuess.slice(randomIndex + 1);
-                    updateGrid();
+                    message.textContent = `Game over. The word was ${word}.`;
                 }
             }
 
             function handleKeydown(e) {
+                if (!canMove) return;
+
                 const key = e.key.toUpperCase();
                 if (key === 'ENTER' || key === 'BACKSPACE' || (key.length === 1 && key >= 'A' && key <= 'Z')) {
                     handleInput(key === 'BACKSPACE' ? '⌫' : key);
@@ -482,23 +387,49 @@ const games = [
             }
 
             document.addEventListener('keydown', handleKeydown);
-            hintButton.addEventListener('click', giveHint);
 
-            // Clean up event listeners when switching games
+            // Clean up event listener when switching games
             return () => {
                 document.removeEventListener('keydown', handleKeydown);
-                hintButton.removeEventListener('click', giveHint);
             };
         }
     }
 ];
 
+const boredButton = document.getElementById('boredButton');
 const gameContainer = document.getElementById('gameContainer');
+const headerButton = document.getElementById('headerButton');
+const message = document.getElementById('message');
 
-// Remove or comment out these lines:
-// const boredButton = document.getElementById('boredButton');
-// boredButton.addEventListener('click', () => {
-//     const randomGame = games[Math.floor(Math.random() * games.length)];
-//     gameContainer.innerHTML = randomGame.render();
-//     randomGame.init();
-// });
+let availableGames = [...games];
+
+function startGame() {
+    if (availableGames.length === 0) {
+        availableGames = [...games];
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableGames.length);
+    const randomGame = availableGames[randomIndex];
+    availableGames.splice(randomIndex, 1);
+
+    loadGame(randomGame);
+}
+
+function loadGame(game) {
+    if (typeof window.currentCleanupFunction === 'function') {
+        window.currentCleanupFunction();
+    }
+
+    gameContainer.innerHTML = game.render();
+    window.currentCleanupFunction = game.init();
+
+    // Update Bored Button in header
+    headerButton.innerHTML = '<button id="headerBoredButton" class="back-button">Bored Button</button>';
+    const headerBoredButton = document.getElementById('headerBoredButton');
+    headerBoredButton.addEventListener('click', startGame);
+
+    message.textContent = `Playing: ${game.name}`;
+}
+
+// Initial setup
+boredButton.addEventListener('click', startGame);

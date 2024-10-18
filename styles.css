@@ -21,12 +21,36 @@ body {
 #message {
     font-size: 1.5rem;
     margin: 0;
-    max-width: 60%;
 }
 
-#boredButton {
+#headerButton {
+    display: flex;
+    align-items: center;
+}
+
+.container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#gameContainer {
+    background-color: #34495e;
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+#boredButton, .back-button {
     font-size: 1.2rem;
-    padding: 10px 20px;
+    padding: 15px 30px;
     background-color: #e74c3c;
     color: #fff;
     border: none;
@@ -35,23 +59,8 @@ body {
     transition: background-color 0.3s ease;
 }
 
-#boredButton:hover {
+#boredButton:hover, .back-button:hover {
     background-color: #c0392b;
-}
-
-.container {
-    flex-grow: 1;
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-#gameContainer {
-    background-color: #34495e;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 20px;
 }
 
 /* Guess the Number styles */
@@ -100,8 +109,9 @@ body {
 }
 
 .game-title {
-    font-size: 48px;
+    font-size: 36px;
     font-weight: bold;
+    color: #776e65;
     margin: 0;
 }
 
@@ -109,60 +119,53 @@ body {
     background-color: #bbada0;
     padding: 10px 15px;
     border-radius: 3px;
-    color: white;
+    color: #f9f6f2;
+    font-weight: bold;
+    text-align: center;
 }
 
 .score-label {
     font-size: 14px;
     display: block;
+    margin-bottom: 5px;
 }
 
 #score-2048 {
     font-size: 24px;
-    font-weight: bold;
 }
 
 #board-2048 {
     background-color: #bbada0;
     border-radius: 6px;
-    padding: 5px;
+    padding: 15px;
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+    box-sizing: border-box;
 }
 
 .grid-cell {
-    width: calc(25% - 10px);
-    height: calc(25% - 10px);
-    margin: 5px;
     background-color: rgba(238, 228, 218, 0.35);
-    float: left;
     border-radius: 3px;
-}
-
-.tile-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    aspect-ratio: 1 / 1;
 }
 
 .tile {
     position: absolute;
-    width: calc(25% - 10px);
-    height: calc(25% - 10px);
+    width: calc((100% - 60px) / 4); /* 60px is total gap (15px * 4) */
+    height: calc((100% - 60px) / 4);
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     border-radius: 3px;
-    transition: all 0.1s ease-in-out;
-    z-index: 10;
-}
-
-.new-tile {
-    animation: appear 0.2s ease-in-out;
+    font-size: 35px;
+    background-color: #eee4da;
+    color: #776e65;
+    transition: all 100ms ease-in-out;
 }
 
 @keyframes appear {
@@ -176,75 +179,40 @@ body {
     }
 }
 
-#new-game-2048 {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-top: 20px;
-    background-color: #8f7a66;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
+.tile-new {
+    animation: appear 200ms ease-in-out;
 }
 
-#new-game-2048:hover {
-    background-color: #9f8b77;
-}
-
-/* Add styles for different tile values */
-.tile-2, .tile-4 {
-    background-color: #eee4da;
-    color: #776e65;
-    font-size: 35px;
-}
+/* Tile colors */
+.tile-2 { background-color: #eee4da; }
 .tile-4 { background-color: #ede0c8; }
-.tile-8 { 
-    background-color: #f2b179; 
-    color: #f9f6f2; 
-    font-size: 35px;
+.tile-8 { background-color: #f2b179; color: #f9f6f2; }
+.tile-16 { background-color: #f59563; color: #f9f6f2; }
+.tile-32 { background-color: #f67c5f; color: #f9f6f2; }
+.tile-64 { background-color: #f65e3b; color: #f9f6f2; }
+.tile-128 { background-color: #edcf72; color: #f9f6f2; font-size: 45px; }
+.tile-256 { background-color: #edcc61; color: #f9f6f2; font-size: 45px; }
+.tile-512 { background-color: #edc850; color: #f9f6f2; font-size: 45px; }
+.tile-1024 { background-color: #edc53f; color: #f9f6f2; font-size: 35px; }
+.tile-2048 { background-color: #edc22e; color: #f9f6f2; font-size: 35px; }
+
+/* Responsive font sizes */
+@media screen and (min-width: 520px) {
+    .tile {
+        font-size: 45px;
+    }
+    .tile-1024, .tile-2048 {
+        font-size: 35px;
+    }
 }
-.tile-16 { 
-    background-color: #f59563; 
-    color: #f9f6f2; 
-    font-size: 35px;
-}
-.tile-32 { 
-    background-color: #f67c5f; 
-    color: #f9f6f2; 
-    font-size: 35px;
-}
-.tile-64 { 
-    background-color: #f65e3b; 
-    color: #f9f6f2; 
-    font-size: 35px;
-}
-.tile-128 { 
-    background-color: #edcf72; 
-    color: #f9f6f2; 
-    font-size: 30px;
-}
-.tile-256 { 
-    background-color: #edcc61; 
-    color: #f9f6f2; 
-    font-size: 30px;
-}
-.tile-512 { 
-    background-color: #edc850; 
-    color: #f9f6f2; 
-    font-size: 30px;
-}
-.tile-1024 { 
-    background-color: #edc53f; 
-    color: #f9f6f2; 
-    font-size: 25px;
-}
-.tile-2048 { 
-    background-color: #edc22e; 
-    color: #f9f6f2; 
-    font-size: 25px;
+
+@media screen and (min-width: 720px) {
+    .tile {
+        font-size: 55px;
+    }
+    .tile-1024, .tile-2048 {
+        font-size: 45px;
+    }
 }
 
 /* ... (remaining styles unchanged) */
@@ -467,17 +435,25 @@ body {
     }
 }
 
-#backToDashboard {
-    font-size: 1rem;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #fff;
+#new-game-2048 {
+    background-color: #8f7a66;
     border: none;
-    border-radius: 5px;
+    border-radius: 3px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #f9f6f2;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#backToDashboard:hover {
-    background-color: #2980b9;
+#new-game-2048:hover {
+    background-color: #9f8b77;
+}
+
+#new-game-2048:active {
+    background-color: #7f6a56;
+    transform: translateY(2px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
